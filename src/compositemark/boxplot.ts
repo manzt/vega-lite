@@ -1,7 +1,7 @@
 import {isNumber, isObject} from 'vega-util';
 import {Channel} from '../channel';
 import {Config} from '../config';
-import {Encoding, extractTransformsFromEncoding} from '../encoding';
+import {Encoding} from '../encoding';
 import {PositionFieldDef} from '../fielddef';
 import * as log from '../log';
 import {isMarkDef, MarkDef} from '../mark';
@@ -11,6 +11,7 @@ import {Flag, getFirstDefined, keys} from '../util';
 import {Orient} from '../vega.schema';
 import {
   compositeMarkContinuousAxis,
+  compositeMarkExtractTransformsFromEncoding,
   compositeMarkOrient,
   CompositeMarkTooltipSummary,
   filterUnsupportedChannels,
@@ -300,10 +301,13 @@ function boxParams(
 
   const {[continuousAxis]: oldContinuousAxisChannelDef, ...oldEncodingWithoutContinuousAxis} = spec.encoding;
 
-  const {bins, timeUnits, aggregate, groupby, encoding: encodingWithoutContinuousAxis} = extractTransformsFromEncoding(
-    oldEncodingWithoutContinuousAxis,
-    config
-  );
+  const {
+    bins,
+    timeUnits,
+    aggregate,
+    groupby,
+    encoding: encodingWithoutContinuousAxis
+  } = compositeMarkExtractTransformsFromEncoding(oldEncodingWithoutContinuousAxis, config);
 
   const ticksOrient: Orient = orient === 'vertical' ? 'horizontal' : 'vertical';
 
