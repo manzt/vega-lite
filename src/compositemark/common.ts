@@ -10,6 +10,7 @@ import {
   isContinuous,
   isFieldDef,
   isPositionFieldDef,
+  isTimeFieldDef,
   PositionFieldDef,
   RepeatRef,
   SecondaryFieldDef,
@@ -147,7 +148,7 @@ export function replaceFormatWithTimeFormatInEncodingWithTimeUnit(
   forEach(encoding, (channelDef, channel) => {
     const {timeUnit} = oldEncoding[channel];
     const axis = isPositionFieldDef(channelDef) && channelDef.axis;
-    if (axis && timeUnit) {
+    if (axis && timeUnit && !isTimeFieldDef(channelDef)) {
       axis.timeFormat = axis.format;
       axis.format = undefined;
     }
