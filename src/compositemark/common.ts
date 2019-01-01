@@ -16,6 +16,7 @@ import {
   SecondaryFieldDef,
   TextFieldDef
 } from '../fielddef';
+import {isTypedFieldDef} from '../fielddef';
 import * as log from '../log';
 import {ColorMixins, GenericMarkDef, isMarkDef, Mark, MarkConfig, MarkDef} from '../mark';
 import {GenericUnitSpec, NormalizedUnitSpec} from '../spec';
@@ -148,7 +149,7 @@ export function replaceFormatWithTimeFormatInEncodingWithTimeUnit(
   forEach(encoding, (channelDef, channel) => {
     const {timeUnit} = oldEncoding[channel];
     const axis = isPositionFieldDef(channelDef) && channelDef.axis;
-    if (axis && timeUnit && !isTimeFieldDef(channelDef)) {
+    if (axis && timeUnit && isTypedFieldDef(channelDef) && !isTimeFieldDef(channelDef)) {
       axis.timeFormat = axis.format;
       axis.format = undefined;
     }
