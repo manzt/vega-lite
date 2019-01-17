@@ -86,7 +86,7 @@ export interface Axis extends BaseAxisNoSignals, Guide {
    */
   tickStep?: number;
 
-  timeFormat?: string;
+  formatType?: 'number' | 'time';
 
   /**
    * Explicitly set the visible axis tick values.
@@ -282,7 +282,7 @@ const AXIS_PROPERTIES_INDEX: Flag<keyof Axis> = {
   encoding: 1,
   labelAngle: 1,
   tickStep: 1,
-  timeFormat: 1
+  formatType: 1
 };
 
 const VG_AXIS_PROPERTIES_INDEX: Flag<keyof VgAxis> = {

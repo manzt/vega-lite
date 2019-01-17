@@ -11,12 +11,12 @@ import {
   isFieldDef,
   isPositionFieldDef,
   isTimeFieldDef,
+  isTypedFieldDef,
   PositionFieldDef,
   RepeatRef,
   SecondaryFieldDef,
   TextFieldDef
 } from '../fielddef';
-import {isTypedFieldDef} from '../fielddef';
 import * as log from '../log';
 import {ColorMixins, GenericMarkDef, isMarkDef, Mark, MarkConfig, MarkDef} from '../mark';
 import {GenericUnitSpec, NormalizedUnitSpec} from '../spec';
@@ -150,8 +150,7 @@ export function replaceFormatWithTimeFormatInEncodingWithTimeUnit(
     const {timeUnit} = oldEncoding[channel];
     const axis = isPositionFieldDef(channelDef) && channelDef.axis;
     if (axis && timeUnit && isTypedFieldDef(channelDef) && !isTimeFieldDef(channelDef)) {
-      axis.timeFormat = axis.format;
-      axis.format = undefined;
+      axis.formatType = 'time';
     }
   });
 }

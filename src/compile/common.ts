@@ -78,7 +78,7 @@ export function formatSignalRef(
   config: Config
 ) {
   const format = numberFormat(fieldDef, specifiedFormat, config);
-  const timeFormat = isPositionFieldDef(fieldDef) && fieldDef.axis && fieldDef.axis.timeFormat;
+  const formatType = isPositionFieldDef(fieldDef) && fieldDef.axis && fieldDef.axis.formatType;
   if (isBinning(fieldDef.bin)) {
     const startField = vgField(fieldDef, {expr});
     const endField = vgField(fieldDef, {expr, binSuffix: 'end'});
@@ -89,7 +89,7 @@ export function formatSignalRef(
     return {
       signal: `${formatExpr(vgField(fieldDef, {expr, binSuffix: 'range'}), format)}`
     };
-  } else if (isTimeFieldDef(fieldDef) || timeFormat) {
+  } else if (isTimeFieldDef(fieldDef) || formatType === 'time') {
     const isUTCScale = isScaleFieldDef(fieldDef) && fieldDef['scale'] && fieldDef['scale'].type === ScaleType.UTC;
     return {
       signal: timeFormatExpression(
@@ -97,7 +97,7 @@ export function formatSignalRef(
           expr
         }),
         fieldDef.timeUnit,
-        timeFormat ? timeFormat : specifiedFormat,
+        specifiedFormat,
         config.text.shortTimeLabels,
         config.timeFormat,
         isUTCScale,
@@ -113,7 +113,10 @@ export function formatSignalRef(
  * Returns number format for a fieldDef
  */
 export function numberFormat(fieldDef: TypedFieldDef<string>, specifiedFormat: string, config: Config) {
-  if (isTimeFieldDef(fieldDef)) {
+  if (
+    isTimeFieldDef(fieldDef) ||
+    (isPositionFieldDef(fieldDef) && fieldDef.axis && fieldDef.axis.formatType === 'time')
+  ) {
     return undefined;
   }
 

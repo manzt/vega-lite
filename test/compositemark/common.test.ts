@@ -47,7 +47,10 @@ describe('common feature of composite marks', () => {
         title: 'Year (year)',
         type: 'ordinal',
         field: 'year_Year',
-        axis: {timeFormat: '%Y'}
+        axis: {
+          format: '%Y',
+          formatType: 'time'
+        }
       });
     }
   });
