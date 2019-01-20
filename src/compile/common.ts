@@ -2,6 +2,7 @@ import {isArray} from 'vega-util';
 import {isBinning} from '../bin';
 import {Config, StyleConfigIndex} from '../config';
 import {
+  FieldDef,
   FieldDefBase,
   FieldRefOption,
   isPositionFieldDef,
@@ -78,7 +79,6 @@ export function formatSignalRef(
   config: Config
 ) {
   const format = numberFormat(fieldDef, specifiedFormat, config);
-  const formatType = isPositionFieldDef(fieldDef) && fieldDef.axis && fieldDef.axis.formatType;
   if (isBinning(fieldDef.bin)) {
     const startField = vgField(fieldDef, {expr});
     const endField = vgField(fieldDef, {expr, binSuffix: 'end'});
@@ -89,7 +89,7 @@ export function formatSignalRef(
     return {
       signal: `${formatExpr(vgField(fieldDef, {expr, binSuffix: 'range'}), format)}`
     };
-  } else if (isTimeFieldDef(fieldDef) || formatType === 'time') {
+  } else if (isTimeFieldDef(fieldDef) || getFormatType(fieldDef) === 'time') {
     const isUTCScale = isScaleFieldDef(fieldDef) && fieldDef['scale'] && fieldDef['scale'].type === ScaleType.UTC;
     return {
       signal: timeFormatExpression(
@@ -113,10 +113,7 @@ export function formatSignalRef(
  * Returns number format for a fieldDef
  */
 export function numberFormat(fieldDef: TypedFieldDef<string>, specifiedFormat: string, config: Config) {
-  if (
-    isTimeFieldDef(fieldDef) ||
-    (isPositionFieldDef(fieldDef) && fieldDef.axis && fieldDef.axis.formatType === 'time')
-  ) {
+  if (isTimeFieldDef(fieldDef) || getFormatType(fieldDef) === 'time') {
     return undefined;
   }
 
@@ -130,6 +127,10 @@ export function numberFormat(fieldDef: TypedFieldDef<string>, specifiedFormat: s
     return config.numberFormat;
   }
   return undefined;
+}
+
+function getFormatType(fieldDef: FieldDef<string>) {
+  return isPositionFieldDef(fieldDef) && fieldDef.axis && fieldDef.axis.formatType;
 }
 
 function formatExpr(field: string, format: string) {

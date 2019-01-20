@@ -86,6 +86,9 @@ export interface Axis extends BaseAxisNoSignals, Guide {
    */
   tickStep?: number;
 
+  /**
+   * A type of axis format to be forced to.
+   */
   formatType?: 'number' | 'time';
 
   /**
