@@ -1,7 +1,7 @@
 import {isNumber, isObject} from 'vega-util';
 import {Channel} from '../channel';
 import {Config} from '../config';
-import {Encoding} from '../encoding';
+import {Encoding, extractTransformsFromEncoding} from '../encoding';
 import {PositionFieldDef} from '../fielddef';
 import * as log from '../log';
 import {isMarkDef, MarkDef} from '../mark';
@@ -11,7 +11,6 @@ import {Flag, getFirstDefined, keys} from '../util';
 import {Orient} from '../vega.schema';
 import {
   compositeMarkContinuousAxis,
-  compositeMarkExtractTransformsFromEncoding,
   compositeMarkOrient,
   CompositeMarkTooltipSummary,
   filterUnsupportedChannels,
@@ -285,19 +284,19 @@ function boxParams(
   const postAggregateCalculates: CalculateTransform[] = isMinMax
     ? []
     : [
-        {
-          calculate: `datum.upper_box_${continuousFieldName} - datum.lower_box_${continuousFieldName}`,
-          as: 'iqr_' + continuousFieldName
-        },
-        {
-          calculate: `min(datum.upper_box_${continuousFieldName} + datum.iqr_${continuousFieldName} * ${extent}, datum.max_${continuousFieldName})`,
-          as: 'upper_whisker_' + continuousFieldName
-        },
-        {
-          calculate: `max(datum.lower_box_${continuousFieldName} - datum.iqr_${continuousFieldName} * ${extent}, datum.min_${continuousFieldName})`,
-          as: 'lower_whisker_' + continuousFieldName
-        }
-      ];
+      {
+        calculate: `datum.upper_box_${continuousFieldName} - datum.lower_box_${continuousFieldName}`,
+        as: 'iqr_' + continuousFieldName
+      },
+      {
+        calculate: `min(datum.upper_box_${continuousFieldName} + datum.iqr_${continuousFieldName} * ${extent}, datum.max_${continuousFieldName})`,
+        as: 'upper_whisker_' + continuousFieldName
+      },
+      {
+        calculate: `max(datum.lower_box_${continuousFieldName} - datum.iqr_${continuousFieldName} * ${extent}, datum.min_${continuousFieldName})`,
+        as: 'lower_whisker_' + continuousFieldName
+      }
+    ];
 
   const {[continuousAxis]: oldContinuousAxisChannelDef, ...oldEncodingWithoutContinuousAxis} = spec.encoding;
 
@@ -307,7 +306,7 @@ function boxParams(
     aggregate,
     groupby,
     encoding: encodingWithoutContinuousAxis
-  } = compositeMarkExtractTransformsFromEncoding(oldEncodingWithoutContinuousAxis, config);
+  } = extractTransformsFromEncoding(oldEncodingWithoutContinuousAxis, config);
 
   const ticksOrient: Orient = orient === 'vertical' ? 'horizontal' : 'vertical';
 

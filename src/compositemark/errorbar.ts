@@ -2,7 +2,7 @@ import {AggregateOp} from 'vega';
 import {Channel} from '../channel';
 import {Config} from '../config';
 import {Data} from '../data';
-import {Encoding} from '../encoding';
+import {Encoding, extractTransformsFromEncoding} from '../encoding';
 import {
   Field,
   FieldDefWithoutScale,
@@ -21,7 +21,6 @@ import {Flag, keys, titlecase} from '../util';
 import {Orient} from '../vega.schema';
 import {
   compositeMarkContinuousAxis,
-  compositeMarkExtractTransformsFromEncoding,
   compositeMarkOrient,
   CompositeMarkTooltipSummary,
   filterUnsupportedChannels,
@@ -353,7 +352,7 @@ export function errorBarParams<
     aggregate: oldAggregate,
     groupby: oldGroupBy,
     encoding: encodingWithoutContinuousAxis
-  } = compositeMarkExtractTransformsFromEncoding(oldEncodingWithoutContinuousAxis, config);
+  } = extractTransformsFromEncoding(oldEncodingWithoutContinuousAxis, config);
 
   const aggregate: AggregatedFieldDef[] = [...oldAggregate, ...errorBarSpecificAggregate];
   const groupby: string[] = inputType !== 'raw' ? [] : oldGroupBy;
@@ -413,10 +412,10 @@ function errorBarAggregationAndCalculation<
     const center: ErrorBarCenter = markDef.center
       ? markDef.center
       : markDef.extent
-      ? markDef.extent === 'iqr'
-        ? 'median'
-        : 'mean'
-      : config.errorbar.center;
+        ? markDef.extent === 'iqr'
+          ? 'median'
+          : 'mean'
+        : config.errorbar.center;
     const extent: ErrorBarExtent = markDef.extent ? markDef.extent : center === 'mean' ? 'stderr' : 'iqr';
 
     if ((center === 'median') !== (extent === 'iqr')) {

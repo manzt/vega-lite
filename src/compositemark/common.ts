@@ -1,26 +1,20 @@
 import {isBoolean, isString} from 'vega-util';
 import {CompositeMark, CompositeMarkDef} from '.';
 import {Channel} from '../channel';
-import {Config} from '../config';
-import {Encoding, extractTransformsFromEncoding, fieldDefs, forEach, reduce} from '../encoding';
+import {Encoding, fieldDefs, reduce} from '../encoding';
 import {
   Field,
   FieldDefBase,
   FieldDefWithoutScale,
   isContinuous,
   isFieldDef,
-  isPositionFieldDef,
-  isTimeFieldDef,
-  isTypedFieldDef,
   PositionFieldDef,
-  RepeatRef,
   SecondaryFieldDef,
   TextFieldDef
 } from '../fielddef';
 import * as log from '../log';
 import {ColorMixins, GenericMarkDef, isMarkDef, Mark, MarkConfig, MarkDef} from '../mark';
 import {GenericUnitSpec, NormalizedUnitSpec} from '../spec';
-import {AggregatedFieldDef, BinTransform, TimeUnitTransform} from '../transform';
 import {Orient} from '../vega.schema';
 
 export type PartsMixins<P extends string> = Partial<Record<P, boolean | MarkConfig>>;
@@ -99,8 +93,8 @@ export function makeCompositeAggregatePartFactory<P extends PartsMixins<any>>(
       axis && axis.title !== undefined
         ? undefined
         : continuousAxisChannelDef.title !== undefined
-        ? continuousAxisChannelDef.title
-        : continuousAxisChannelDef.field;
+          ? continuousAxisChannelDef.title
+          : continuousAxisChannelDef.field;
 
     return partLayerMixins<P>(compositeMarkDef, partName, compositeMarkConfig, {
       mark, // TODO better remove this method and just have mark as a parameter of the method
@@ -114,45 +108,17 @@ export function makeCompositeAggregatePartFactory<P extends PartsMixins<any>>(
         },
         ...(isString(endPositionPrefix)
           ? {
-              [continuousAxis + '2']: {
-                field: endPositionPrefix + '_' + continuousAxisChannelDef.field,
-                type: continuousAxisChannelDef.type
-              }
+            [continuousAxis + '2']: {
+              field: endPositionPrefix + '_' + continuousAxisChannelDef.field,
+              type: continuousAxisChannelDef.type
             }
+          }
           : {}),
         ...sharedEncoding,
         ...extraEncoding
       }
     });
   };
-}
-
-export function compositeMarkExtractTransformsFromEncoding(
-  oldEncoding: Encoding<string | RepeatRef>,
-  config: Config
-): {
-  bins: BinTransform[];
-  timeUnits: TimeUnitTransform[];
-  aggregate: AggregatedFieldDef[];
-  groupby: string[];
-  encoding: Encoding<string>;
-} {
-  const {bins, timeUnits, aggregate, groupby, encoding} = extractTransformsFromEncoding(oldEncoding, config);
-  replaceFormatWithTimeFormatInEncodingWithTimeUnit(oldEncoding, encoding);
-  return {bins, timeUnits, aggregate, groupby, encoding};
-}
-
-export function replaceFormatWithTimeFormatInEncodingWithTimeUnit(
-  oldEncoding: Encoding<string | RepeatRef>,
-  encoding: Encoding<string>
-): void {
-  forEach(encoding, (channelDef, channel) => {
-    const {timeUnit} = oldEncoding[channel];
-    const axis = isPositionFieldDef(channelDef) && channelDef.axis;
-    if (axis && timeUnit && isTypedFieldDef(channelDef) && !isTimeFieldDef(channelDef)) {
-      axis.formatType = 'time';
-    }
-  });
 }
 
 export function partLayerMixins<P extends PartsMixins<any>>(
