@@ -5615,6 +5615,14 @@
           "description": "The formatting pattern for labels. This is D3's [number format pattern](https://github.com/d3/d3-format#locale_format) for quantitative fields and D3's [time format pattern](https://github.com/d3/d3-time-format#locale_format) for time field.\n\nSee the [format documentation](https://vega.github.io/vega-lite/docs/format.html) for more information.\n\n__Default value:__  derived from [numberFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for quantitative fields and from [timeFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for temporal fields.",
           "type": "string"
         },
+        "formatType": {
+          "description": "A type of axis format to be forced to.",
+          "enum": [
+            "number",
+            "time"
+          ],
+          "type": "string"
+        },
         "labelAngle": {
           "description": "The rotation angle of the header labels.\n\n__Default value:__ `0` for column header, `-90` for row header.",
           "maximum": 360,
@@ -6226,6 +6234,14 @@
         },
         "format": {
           "description": "The formatting pattern for labels. This is D3's [number format pattern](https://github.com/d3/d3-format#locale_format) for quantitative fields and D3's [time format pattern](https://github.com/d3/d3-time-format#locale_format) for time field.\n\nSee the [format documentation](https://vega.github.io/vega-lite/docs/format.html) for more information.\n\n__Default value:__  derived from [numberFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for quantitative fields and from [timeFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for temporal fields.",
+          "type": "string"
+        },
+        "formatType": {
+          "description": "A type of axis format to be forced to.",
+          "enum": [
+            "number",
+            "time"
+          ],
           "type": "string"
         },
         "gradientLength": {

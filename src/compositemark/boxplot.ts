@@ -284,29 +284,26 @@ function boxParams(
   const postAggregateCalculates: CalculateTransform[] = isMinMax
     ? []
     : [
-      {
-        calculate: `datum.upper_box_${continuousFieldName} - datum.lower_box_${continuousFieldName}`,
-        as: 'iqr_' + continuousFieldName
-      },
-      {
-        calculate: `min(datum.upper_box_${continuousFieldName} + datum.iqr_${continuousFieldName} * ${extent}, datum.max_${continuousFieldName})`,
-        as: 'upper_whisker_' + continuousFieldName
-      },
-      {
-        calculate: `max(datum.lower_box_${continuousFieldName} - datum.iqr_${continuousFieldName} * ${extent}, datum.min_${continuousFieldName})`,
-        as: 'lower_whisker_' + continuousFieldName
-      }
-    ];
+        {
+          calculate: `datum.upper_box_${continuousFieldName} - datum.lower_box_${continuousFieldName}`,
+          as: 'iqr_' + continuousFieldName
+        },
+        {
+          calculate: `min(datum.upper_box_${continuousFieldName} + datum.iqr_${continuousFieldName} * ${extent}, datum.max_${continuousFieldName})`,
+          as: 'upper_whisker_' + continuousFieldName
+        },
+        {
+          calculate: `max(datum.lower_box_${continuousFieldName} - datum.iqr_${continuousFieldName} * ${extent}, datum.min_${continuousFieldName})`,
+          as: 'lower_whisker_' + continuousFieldName
+        }
+      ];
 
   const {[continuousAxis]: oldContinuousAxisChannelDef, ...oldEncodingWithoutContinuousAxis} = spec.encoding;
 
-  const {
-    bins,
-    timeUnits,
-    aggregate,
-    groupby,
-    encoding: encodingWithoutContinuousAxis
-  } = extractTransformsFromEncoding(oldEncodingWithoutContinuousAxis, config);
+  const {bins, timeUnits, aggregate, groupby, encoding: encodingWithoutContinuousAxis} = extractTransformsFromEncoding(
+    oldEncodingWithoutContinuousAxis,
+    config
+  );
 
   const ticksOrient: Orient = orient === 'vertical' ? 'horizontal' : 'vertical';
 

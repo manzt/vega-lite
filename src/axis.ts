@@ -87,11 +87,6 @@ export interface Axis extends BaseAxisNoSignals, Guide {
   tickStep?: number;
 
   /**
-   * A type of axis format to be forced to.
-   */
-  formatType?: 'number' | 'time';
-
-  /**
    * Explicitly set the visible axis tick values.
    */
   values?: number[] | string[] | boolean[] | DateTime[];

@@ -26,6 +26,11 @@ export interface Guide extends TitleMixins {
    * __Default value:__  derived from [numberFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for quantitative fields and from [timeFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for temporal fields.
    */
   format?: string;
+
+  /**
+   * A type of axis format to be forced to.
+   */
+  formatType?: 'number' | 'time';
 }
 export interface VlOnlyGuideConfig {
   /**
