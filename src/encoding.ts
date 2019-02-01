@@ -326,7 +326,7 @@ export function extractTransformsFromEncoding(oldEncoding: Encoding<Field>, conf
           } else if (isPositionChannel) {
             newChannelDef['axis'] = {format, formatType: 'time', ...newChannelDef['axis']};
           } else if (channel === 'text' || channel === 'tooltip') {
-            newChannelDef['format'] = newChannelDef['format'] || format;
+            newChannelDef['format'] = {...(newChannelDef['format'] || format), ...{fotmatType: 'time'}};
           }
         }
         if (!aggOp) {
