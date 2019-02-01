@@ -93,6 +93,67 @@ describe('encoding', () => {
         }
       });
     });
+    it('should produce format and formatType in axis when there is timeUnit', () => {
+      const output = extractTransformsFromEncoding(
+        normalizeEncoding(
+          {
+            x: {field: 'a', type: 'quantitative'},
+            y: {timeUnit: 'year', field: 'b', type: 'ordinal'}
+          },
+          'line'
+        ),
+        defaultConfig
+      );
+
+      expect(output.encoding).toEqual({
+        x: {
+          field: 'a',
+          type: 'quantitative'
+        },
+        y: {
+          axis: {
+            format: '%Y',
+            formatType: 'time'
+          },
+          field: 'year_b',
+          title: 'b (year)',
+          type: 'ordinal'
+        }
+      });
+    });
+    it('should produce format and formatType in legend when there is timeUnit', () => {
+      const output = extractTransformsFromEncoding(
+        normalizeEncoding(
+          {
+            x: {field: 'a', type: 'quantitative'},
+            y: {field: 'b', type: 'ordinal'},
+            detail: {field: 'c', timeUnit: 'month', type: 'nominal'}
+          },
+          'line'
+        ),
+        defaultConfig
+      );
+
+      expect(output.encoding).toEqual({
+        x: {
+          field: 'a',
+          type: 'quantitative'
+        },
+        y: {
+          field: 'b',
+          type: 'ordinal'
+        },
+        detail: {
+          legend: {
+            format: '%b',
+            formatType: 'time'
+          },
+          field: 'month_c',
+          title: 'c (month)',
+          type: 'nominal'
+        }
+      });
+    });
     it('should extract aggregates from encoding', () => {
       const output = extractTransformsFromEncoding(
         normalizeEncoding(
