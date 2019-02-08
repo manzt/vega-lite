@@ -365,7 +365,7 @@
           "type": "string"
         },
         "formatType": {
-          "description": "A type of axis format to be forced to.",
+          "description": "A type of guide formatting to be forced to.",
           "enum": [
             "number",
             "time"
@@ -5616,7 +5616,7 @@
           "type": "string"
         },
         "formatType": {
-          "description": "A type of axis format to be forced to.",
+          "description": "A type of guide formatting to be forced to.",
           "enum": [
             "number",
             "time"
@@ -6237,7 +6237,7 @@
           "type": "string"
         },
         "formatType": {
-          "description": "A type of axis format to be forced to.",
+          "description": "A type of guide formatting to be forced to.",
           "enum": [
             "number",
             "time"
