@@ -28,7 +28,7 @@ export interface Guide extends TitleMixins {
   format?: string;
 
   /**
-   * A type of axis format to be forced to.
+   * A type of guide formatting to be forced to.
    */
   formatType?: 'number' | 'time';
 }
